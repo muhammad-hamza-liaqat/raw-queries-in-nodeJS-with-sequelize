@@ -6,9 +6,9 @@ const sequelize = new Sequelize('classical', 'root', '', {
 })
 
 sequelize.authenticate().then(() => {
-    console.log('connection established');
+    console.log('connected to mySQL');
  }).catch((error) => {
-    console.error('unable to connect to the DB');
+    console.error('database not connected...!');
  });
 
 
