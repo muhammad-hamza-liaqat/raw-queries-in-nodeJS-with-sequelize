@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require("../database/connection"); 
 
-const offices = sequelize.define('Office', {
+const offices = sequelize.define('offices', {
     officeCode: {
       type: DataTypes.NUMBER,
       primaryKey:true,

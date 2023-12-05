@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../database/connection'); 
 
 // Define the Product model
-const Product = sequelize.define('product', {
+const Product = sequelize.define('products', {
   productCode: {
     type: DataTypes.STRING(15),
     allowNull: false,

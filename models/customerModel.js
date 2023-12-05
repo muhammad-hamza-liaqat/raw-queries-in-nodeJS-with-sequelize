@@ -3,7 +3,7 @@ const sequelize = require("../database/connection");
 const Payment = require('./paymentModel');
 const Employee = require("./employeeModel")
 
-const Customer = sequelize.define('Customer', {
+const Customer = sequelize.define('customers', {
   customerNumber: {
     type: DataTypes.INTEGER,
     primaryKey: true,

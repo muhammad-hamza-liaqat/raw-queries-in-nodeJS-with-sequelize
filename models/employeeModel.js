@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require("../database/connection"); 
 
-const Employee = sequelize.define('Employee', {
+const Employee = sequelize.define('employees', {
   employeeNumber: {
     type: DataTypes.INTEGER,
     allowNull: false,
