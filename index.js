@@ -3,6 +3,7 @@ const app = express();
 const port=3000;
 // database connection with mysql
 const connection = require("./database/connection");
+require("./models/association");
 
 
 
