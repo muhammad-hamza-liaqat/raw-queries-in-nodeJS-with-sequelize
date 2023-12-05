@@ -6,7 +6,7 @@ const customer = require("./employeeModel");
 const employee = require("./employeeModel");
 const office = require("./officeModel");
 const order = require("./orderModel");
-const orderDetail = require("./orderDetails");
+const orderDetail = require("./orderDetailsModel");
 
 // product and productLine
 productLine.hasMany(product, { foreignKey: 'productLine', targetKey: 'productLine' });
