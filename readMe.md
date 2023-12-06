@@ -32,3 +32,7 @@ http://localhost:3000/raw/19
 
 
 response middleware added...
+
+winston npm module added... it is used to log the information about the request that is made timestamp etc the things related to the request made.
+
+api.log file is saving the log locally in the project folder.
