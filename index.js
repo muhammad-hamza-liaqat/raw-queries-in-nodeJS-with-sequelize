@@ -1,34 +1,29 @@
 const express = require("express");
 const app = express();
-const port=3000;
+const port = 3000;
 const rateLimit = require("express-rate-limit");
 // database connection with mysql
 const connection = require("./database/connection");
 const queryRoute = require("./routes/routes");
 require("./models/association");
 
-
-// express-rate-limit 
+// express-rate-limit
 const limiter = rateLimit({
-    
-    windowMs: 60 * 1000,  // one minute
-    max: 10, // max 10 requests
-    message: "Too many request(s) from this IP, Please try again later"
+  windowMs: 60 * 1000, // one minute
+  max: 10, // max 10 requests
+  message: "Too many request(s) from this IP, Please try again later",
 });
 
-
-// global rate limiter middlware for all routes 
+// global rate limiter middlware for all routes
 app.use(limiter);
-
 
 // middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// routes 
+// routes
 app.use("/raw", queryRoute);
 
-
 // server port
-app.listen(port, ()=>{
-    console.log(`server running at localhost:/${port}`);
-})
+app.listen(port, () => {
+  console.log(`server running at localhost:/${port}`);
+});
