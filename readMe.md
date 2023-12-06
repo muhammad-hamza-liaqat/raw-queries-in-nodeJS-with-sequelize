@@ -2,6 +2,8 @@ npm i express-rate-limit
 
 npm install express-rate-limit 
 
+rate limit added for one minutes, you can hit 10 api within one minutes, and it will disable after one minute of activation
+
 Rate limiting is a technique used to control the number of requests a client (or IP address) can make to your API within a specified time window. This helps prevent abuse, ensures fair usage, and protects your server from being overwhelme
 
 documentation: https://www.npmjs.com/package/express-rate-limit
@@ -27,3 +29,6 @@ http://localhost:3000/raw/16
 http://localhost:3000/raw/17
 http://localhost:3000/raw/18
 http://localhost:3000/raw/19
+
+
+response middleware added...

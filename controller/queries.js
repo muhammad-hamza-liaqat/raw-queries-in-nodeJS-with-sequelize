@@ -11,7 +11,6 @@ const sequelize = require("../database/connection");
 const sendResFormat = require("../middleware/responseAPI")
 require("../models/association");
 const functionOne = async (req, res) => {
-  // List the product names and their corresponding product lines for all products.
   const result = await products.findAll({
     attributes: ["productName", "productLine"],
   });
