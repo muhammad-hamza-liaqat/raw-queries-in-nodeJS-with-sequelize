@@ -6,7 +6,7 @@ const rateLimit = require("express-rate-limit");
 const connection = require("./database/connection");
 const queryRoute = require("./routes/routes");
 require("./models/association");
-
+const logger = require("./winston/logger")
 // response format
 const response = require("./middleware/responseAPI");
 app.use(response);
@@ -24,6 +24,10 @@ app.use(limiter);
 // middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use((req, res, next) => {
+  logger.info(`${req.method} ${req.url}`, { body: req.body, query: req.query });
+  next();
+});
 // routes
 app.use("/raw", queryRoute);
 
