@@ -8,15 +8,15 @@ const office = require("./officeModel");
 const order = require("./orderModel");
 const orderDetail = require("./orderDetailsModel");
 
-// product and productLine
+// product and productLine 
 productLine.hasMany(product, { foreignKey: 'productLine', targetKey: 'productLine' });
 product.belongsTo(productLine, { foreignKey: 'productLine', targetKey: 'productLine' });
 
-// product and order Details
+// product and order Details 
 product.hasMany(orderDetail, { foreignKey: 'productCode', targetKey: 'productCode' });
 orderDetail.belongsTo(product, { foreignKey: 'productCode', targetKey: 'productCode' });
 
-// order and order details
+// order and order details 
 order.hasMany(orderDetail, { foreignKey: 'orderNumber', targetKey: 'orderNumber' });
 orderDetail.belongsTo(order, { foreignKey: 'orderNumber', targetKey: 'orderNumber' });
 
