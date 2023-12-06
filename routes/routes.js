@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const queryRoute = express.Router();
-const {functionOne, functionTwo, functionThree, functionFour, functionSix, functionFive, functionSeven, functionEight, functionEleven, function13} = require("../controller/queries")
+const {functionOne, functionTwo, functionThree, functionFour, functionSix, functionFive, functionSeven, functionEight, functionEleven, function13, function10} = require("../controller/queries")
 module.exports = queryRoute
 
 queryRoute.route('/1')
@@ -23,7 +23,7 @@ queryRoute.route('/8')
 queryRoute.route('/9')
 .get();
 queryRoute.route('/10')
-.get();
+.get(function10);
 queryRoute.route('/11')
 .get(functionEleven);
 queryRoute.route('/12')

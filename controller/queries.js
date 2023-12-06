@@ -213,6 +213,35 @@ const function13 = async (req, res) => {
       res.status(500).send('Internal Server Error');
     }
   };
+
+  const function10 = async (req, res) => {
+    try {
+      const result = await sequelize.query(
+        'SELECT products.productName, COUNT(orderdetails.orderNumber) AS numberOfOrders ' +
+        'FROM orderdetails ' +
+        'JOIN products ON orderdetails.productCode = products.productCode ' +
+        'JOIN orders ON orderdetails.orderNumber = orders.orderNumber ' +
+        'JOIN customers ON customers.customerNumber = orders.customerNumber ' +
+        'WHERE customers.country = "USA" ' +
+        'GROUP BY products.productName ' +
+        'ORDER BY COUNT(orderdetails.orderNumber) DESC',
+        {
+          type: sequelize.QueryTypes.SELECT
+        }
+      );
+  
+      res.send(result);
+    } catch (error) {
+      console.error('Error executing Sequelize raw query:', error);
+      res.status(500).send('Internal Server Error');
+    }
+  };
+  
+  
+  
+  
+  
+  
   
   
   
@@ -229,4 +258,5 @@ module.exports = {
   functionEight,
   functionEleven,
   function13,
+  function10,
 };
