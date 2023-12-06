@@ -16,6 +16,7 @@ const limiter = rateLimit({
     message: "Too many request(s) from this IP, Please try again later"
 });
 
+
 // global rate limiter middlware for all routes 
 app.use(limiter);
 

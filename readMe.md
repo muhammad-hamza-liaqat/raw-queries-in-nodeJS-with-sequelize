@@ -4,6 +4,8 @@ npm install express-rate-limit
 
 Rate limiting is a technique used to control the number of requests a client (or IP address) can make to your API within a specified time window. This helps prevent abuse, ensures fair usage, and protects your server from being overwhelme
 
+documentation: https://www.npmjs.com/package/express-rate-limit
+
 endPoints
 
 http://localhost:3000/raw/1
