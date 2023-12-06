@@ -6,6 +6,9 @@ const rateLimit = require("express-rate-limit");
 const connection = require("./database/connection");
 const queryRoute = require("./routes/routes");
 require("./models/association");
+// response format
+const response = require("./middleware/responseAPI");
+app.use(response);
 
 // express-rate-limit
 const limiter = rateLimit({

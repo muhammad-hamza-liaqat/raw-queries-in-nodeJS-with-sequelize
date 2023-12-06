@@ -8,6 +8,7 @@ const customers = require("../models/customerModel");
 const orderDetails = require("../models/orderDetailsModel");
 const { Sequelize } = require("sequelize");
 const sequelize = require("../database/connection");
+const sendResFormat = require("../middleware/responseAPI")
 require("../models/association");
 const functionOne = async (req, res) => {
   // List the product names and their corresponding product lines for all products.
@@ -36,7 +37,7 @@ const functionTwo = async (req, res) => {
     group: ["customers.customerNumber"],
     order: [[sequelize.literal("total_orders"), "DESC"]],
   });
-  res.send(result);
+  res.sendApiResponse(result,200);
 };
 const functionThree = async (req, res) => {
   const result = await payments.findAll({
