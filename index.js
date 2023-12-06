@@ -6,34 +6,6 @@ const rateLimit = require("express-rate-limit");
 const connection = require("./database/connection");
 const queryRoute = require("./routes/routes");
 require("./models/association");
-const fs = require("fs");
-const logFilePath = "./access.log";
-const logFileWriteStream = fs.createWriteStream(logFilePath, { flags: "a" });
-
-
-// pino
-const pino = require("pino");
-const expressPinoLogger = require("express-pino-logger");
-
-const logger = pino({  dest: logFileWriteStream });
-const expressLogger = expressPinoLogger({
-  logger,
-  genReqId: function (req) {
-    return req.headers["x-request-id"] || req.id;
-  },
-  serializers: {
-    req: function (req) {
-      return {
-        method: req.method,
-        url: req.url,
-        headers: req.headers,
-        hostname: req.hostname,
-        remoteAddress: req.ip,
-      };
-    },
-  },
-});
-app.use(expressLogger);
 
 // response format
 const response = require("./middleware/responseAPI");
@@ -59,5 +31,4 @@ app.use("/raw", queryRoute);
 app.listen(port, () => {
   console.log(`server running at localhost:/${port}`);
 });
-
 
