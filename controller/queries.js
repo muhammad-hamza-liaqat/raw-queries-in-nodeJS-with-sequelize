@@ -15,7 +15,7 @@ const functionOne = async (req, res) => {
   const result = await products.findAll({
     attributes: ["productName", "productLine"],
   });
-  res.send(result);
+  res.sendApiResponse(result,200);
 };
 
 const functionTwo = async (req, res) => {
@@ -54,7 +54,7 @@ const functionThree = async (req, res) => {
     group: ["payments.customerNumber"],
   });
 
-  res.send(result);
+  res.sendApiResponse(result,200);
 };
 
 const functionFour = async (req, res) => {
@@ -76,7 +76,7 @@ const functionFour = async (req, res) => {
     group: ["products.productCode", "products.productName"],
     order: [[sequelize.literal("number_of_orders"), "DESC"]],
   });
-  res.send(result);
+  res.sendApiResponse(result,200);
 };
 
 const functionSix = async (req, res) => {
@@ -98,7 +98,7 @@ const functionSix = async (req, res) => {
     group: ["customers.customerNumber"],
     order: [[sequelize.literal("total_orders"), "DESC"]],
   });
-  res.send(result);
+  res.sendApiResponse(result,200);
 };
 
 const functionFive = async (req, res) => {
@@ -120,7 +120,7 @@ const functionFive = async (req, res) => {
     nest: true,
   });
 
-  res.send(result);
+  res.sendApiResponse(result,200);
 };
 const functionSeven = async (req, res) => {
   const result = await customers.findAll({
@@ -138,7 +138,7 @@ const functionSeven = async (req, res) => {
     having: sequelize.literal("average_salary > 1000"),
   });
 
-  res.send(result);
+  res.sendApiResponse(result,200);
 };
 
 const functionEight = async (req, res) => {
@@ -159,7 +159,7 @@ const functionEight = async (req, res) => {
     group: ["products.productCode", "products.productName"],
   });
 
-  res.send(result);
+  res.sendApiResponse(result,200);
 };
 
 const functionEleven = async (req, res) => {
@@ -181,7 +181,7 @@ const functionEleven = async (req, res) => {
     group: ["products.productLine"],
   });
 
-  res.send(result);
+  res.sendApiResponse(result,200);
 };
 const function13 = async (req, res) => {
   const result = await customers.findAll({
@@ -202,7 +202,7 @@ const function13 = async (req, res) => {
     },
   });
 
-  res.send(result);
+  res.sendApiResponse(result,200);
 };
 
 const function10 = async (req, res) => {
@@ -220,7 +220,7 @@ const function10 = async (req, res) => {
     }
   );
 
-  res.send(result);
+  res.sendApiResponse(result,200);
 };
 
 module.exports = {
