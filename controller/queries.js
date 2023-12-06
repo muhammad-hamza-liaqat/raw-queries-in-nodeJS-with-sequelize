@@ -101,30 +101,25 @@ const functionSix = async (req, res) => {
 };
 
 const functionFive = async (req, res) => {
-  try {
-    const result = await employees.findAll({
-      attributes: [
-        [sequelize.fn("DISTINCT", sequelize.col("firstName")), "firstName"],
-      ],
-      include: [
-        {
-          model: customers,
-          attributes: [],
-          required: false,
-          where: {
-            salesRepEmployeeNumber: null,
-          },
+  const result = await employees.findAll({
+    attributes: [
+      [sequelize.fn("DISTINCT", sequelize.col("firstName")), "firstName"],
+    ],
+    include: [
+      {
+        model: customers,
+        attributes: [],
+        required: false,
+        where: {
+          salesRepEmployeeNumber: null,
         },
-      ],
-      raw: true,
-      nest: true,
-    });
+      },
+    ],
+    raw: true,
+    nest: true,
+  });
 
-    res.send(result);
-  } catch (error) {
-    console.error("Error executing Sequelize query:", error);
-    res.status(500).send("Internal Server Error");
-  }
+  res.send(result);
 };
 const functionSeven = async (req, res) => {
   const result = await customers.findAll({
@@ -188,64 +183,44 @@ const functionEleven = async (req, res) => {
   res.send(result);
 };
 const function13 = async (req, res) => {
-    try {
-      const result = await customers.findAll({
-        attributes: [
-          [sequelize.col('SalesRep.firstName'), 'firstName'],
-          'customerName'
-        ],
-        include: [
-          {
-            model: employees,
-            attributes: [],
-            as: 'SalesRep'
-          }
-        ],
-        right: true,
-        on: {
-          salesRepEmployeeNumber: sequelize.col('SalesRep.employeeNumber')
-        }
-      });
-  
-      res.send(result);
-    } catch (error) {
-      console.error('Error executing Sequelize query:', error);
-      res.status(500).send('Internal Server Error');
-    }
-  };
+  const result = await customers.findAll({
+    attributes: [
+      [sequelize.col("SalesRep.firstName"), "firstName"],
+      "customerName",
+    ],
+    include: [
+      {
+        model: employees,
+        attributes: [],
+        as: "SalesRep",
+      },
+    ],
+    right: true,
+    on: {
+      salesRepEmployeeNumber: sequelize.col("SalesRep.employeeNumber"),
+    },
+  });
 
-  const function10 = async (req, res) => {
-    try {
-      const result = await sequelize.query(
-        'SELECT products.productName, COUNT(orderdetails.orderNumber) AS numberOfOrders ' +
-        'FROM orderdetails ' +
-        'JOIN products ON orderdetails.productCode = products.productCode ' +
-        'JOIN orders ON orderdetails.orderNumber = orders.orderNumber ' +
-        'JOIN customers ON customers.customerNumber = orders.customerNumber ' +
-        'WHERE customers.country = "USA" ' +
-        'GROUP BY products.productName ' +
-        'ORDER BY COUNT(orderdetails.orderNumber) DESC',
-        {
-          type: sequelize.QueryTypes.SELECT
-        }
-      );
-  
-      res.send(result);
-    } catch (error) {
-      console.error('Error executing Sequelize raw query:', error);
-      res.status(500).send('Internal Server Error');
+  res.send(result);
+};
+
+const function10 = async (req, res) => {
+  const result = await sequelize.query(
+    "SELECT products.productName, COUNT(orderdetails.orderNumber) AS numberOfOrders " +
+      "FROM orderdetails " +
+      "JOIN products ON orderdetails.productCode = products.productCode " +
+      "JOIN orders ON orderdetails.orderNumber = orders.orderNumber " +
+      "JOIN customers ON customers.customerNumber = orders.customerNumber " +
+      'WHERE customers.country = "USA" ' +
+      "GROUP BY products.productName " +
+      "ORDER BY COUNT(orderdetails.orderNumber) DESC",
+    {
+      type: sequelize.QueryTypes.SELECT,
     }
-  };
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+  );
+
+  res.send(result);
+};
 
 module.exports = {
   functionOne,
