@@ -57,23 +57,25 @@ const functionThree = async (req, res) => {
 };
 
 const functionFour = async (req, res) => {
-    const result = await products.findAll({
-        attributes: [
-          'productName',
-          [sequelize.fn('COUNT', sequelize.col('orderdetails.quantityOrdered')), 'number_of_orders']
-        ],
-        include: [
-          {
-            model: orderDetails,
-            attributes: [],
-            required: false,
-          }
-        ],
-        group: ['products.productCode', 'products.productName'],
-        order: [[sequelize.literal('number_of_orders'), 'DESC']]
-    })
-    res.send(result)
-    
+  const result = await products.findAll({
+    attributes: [
+      "productName",
+      [
+        sequelize.fn("COUNT", sequelize.col("orderdetails.quantityOrdered")),
+        "number_of_orders",
+      ],
+    ],
+    include: [
+      {
+        model: orderDetails,
+        attributes: [],
+        required: false,
+      },
+    ],
+    group: ["products.productCode", "products.productName"],
+    order: [[sequelize.literal("number_of_orders"), "DESC"]],
+  });
+  res.send(result);
 };
 
 const functionSix = async (req, res) => {
@@ -99,23 +101,110 @@ const functionSix = async (req, res) => {
 };
 
 const functionFive = async (req, res) => {
+  try {
+    const result = await employees.findAll({
+      attributes: [
+        [sequelize.fn("DISTINCT", sequelize.col("firstName")), "firstName"],
+      ],
+      include: [
+        {
+          model: customers,
+          attributes: [],
+          required: false,
+          where: {
+            salesRepEmployeeNumber: null,
+          },
+        },
+      ],
+      raw: true,
+      nest: true,
+    });
+
+    res.send(result);
+  } catch (error) {
+    console.error("Error executing Sequelize query:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+const functionSeven = async (req, res) => {
+  const result = await customers.findAll({
+    attributes: [
+      "city",
+      [sequelize.fn("AVG", sequelize.col("payments.amount")), "average_salary"],
+    ],
+    include: [
+      {
+        model: payments,
+        attributes: [],
+      },
+    ],
+    group: ["city"],
+    having: sequelize.literal("average_salary > 1000"),
+  });
+
+  res.send(result);
+};
+
+const functionEight = async (req, res) => {
+  const result = await products.findAll({
+    attributes: [
+      "productName",
+      [
+        sequelize.fn("SUM", sequelize.col("orderdetails.quantityOrdered")),
+        "ordered",
+      ],
+    ],
+    include: [
+      {
+        model: orderDetails,
+        attributes: [],
+      },
+    ],
+    group: ["products.productCode", "products.productName"],
+  });
+
+  res.send(result);
+};
+
+const functionEleven = async (req, res) => {
+  const result = await products.findAll({
+    attributes: [
+      "productLine",
+      [
+        sequelize.fn("SUM", sequelize.col("orderdetails.priceEach")),
+        "totalPrice",
+      ],
+    ],
+    include: [
+      {
+        model: orderDetails,
+        attributes: [],
+        required: false, // RIGHT JOIN behavior
+      },
+    ],
+    group: ["products.productLine"],
+  });
+
+  res.send(result);
+};
+const function13 = async (req, res) => {
     try {
-      const result = await employees.findAll({
+      const result = await customers.findAll({
         attributes: [
-          [sequelize.fn('DISTINCT', sequelize.col('firstName')), 'firstName']
+          [sequelize.col('SalesRep.firstName'), 'firstName'],
+          'customerName'
         ],
         include: [
           {
-            model: customers,
+            model: employees,
             attributes: [],
-            required: false,
-            where: {
-              salesRepEmployeeNumber: null
-            }
+            as: 'SalesRep'
           }
         ],
-        raw: true, 
-        nest: true 
+        right: true,
+        on: {
+          salesRepEmployeeNumber: sequelize.col('SalesRep.employeeNumber')
+        }
       });
   
       res.send(result);
@@ -123,44 +212,6 @@ const functionFive = async (req, res) => {
       console.error('Error executing Sequelize query:', error);
       res.status(500).send('Internal Server Error');
     }
-  };
-  const functionSeven = async (req, res) => {
-
-      const result = await customers.findAll({
-        attributes: [
-          'city',
-          [sequelize.fn('AVG', sequelize.col('payments.amount')), 'average_salary']
-        ],
-        include: [
-          {
-            model: payments,
-            attributes: []
-          }
-        ],
-        group: ['city'],
-        having: sequelize.literal('average_salary > 1000')
-      });
-  
-      res.send(result);
-  };
-
-  const functionEight = async (req, res) => {
-
-      const result = await products.findAll({
-        attributes: [
-          'productName',
-          [sequelize.fn('SUM', sequelize.col('orderdetails.quantityOrdered')), 'ordered']
-        ],
-        include: [
-          {
-            model: orderDetails,
-            attributes: []
-          }
-        ],
-        group: ['products.productCode', 'products.productName']
-      });
-  
-      res.send(result);
   };
   
   
@@ -175,5 +226,7 @@ module.exports = {
   functionSix,
   functionFive,
   functionSeven,
-  functionEight
+  functionEight,
+  functionEleven,
+  function13,
 };
