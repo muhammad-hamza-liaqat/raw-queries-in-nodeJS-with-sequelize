@@ -8,7 +8,7 @@ const customers = require("../models/customerModel");
 const orderDetails = require("../models/orderDetailsModel");
 const { Sequelize } = require("sequelize");
 const sequelize = require("../database/connection");
-const sendResFormat = require("../middleware/responseAPI")
+const sendResFormat = require("../middleware/responseAPI");
 require("../models/association");
 
 // query 1
@@ -16,7 +16,7 @@ const functionOne = async (req, res) => {
   const result = await products.findAll({
     attributes: ["productName", "productLine"],
   });
-  res.sendApiResponse(result,200);
+  res.sendApiResponse(result, 200);
 };
 // query 2
 const functionTwo = async (req, res) => {
@@ -38,7 +38,7 @@ const functionTwo = async (req, res) => {
     group: ["customers.customerNumber"],
     order: [[sequelize.literal("total_orders"), "DESC"]],
   });
-  res.sendApiResponse(result,200);
+  res.sendApiResponse(result, 200);
 };
 // query 3
 const functionThree = async (req, res) => {
@@ -56,7 +56,7 @@ const functionThree = async (req, res) => {
     group: ["payments.customerNumber"],
   });
 
-  res.sendApiResponse(result,200);
+  res.sendApiResponse(result, 200);
 };
 // query 4
 
@@ -79,21 +79,27 @@ const functionFour = async (req, res) => {
     group: ["products.productCode", "products.productName"],
     order: [[sequelize.literal("number_of_orders"), "DESC"]],
   });
-  res.sendApiResponse(result,200);
+  res.sendApiResponse(result, 200);
 };
 
 // query 5
 const functionFive = async (req, res) => {
   const result = await employees.findAll({
-    attributes: ['firstName'],
-    include: [{
-      model: customers,
-      attributes:[],
-      required: false // LEFT JOIN
-    }],
-    where: { employeeNumber: sequelize.literal('customers.salesRepEmployeeNumber IS null')  }
+    attributes: ["firstName"],
+    include: [
+      {
+        model: customers,
+        attributes: [],
+        required: false, // LEFT JOIN
+      },
+    ],
+    where: {
+      employeeNumber: sequelize.literal(
+        "customers.salesRepEmployeeNumber IS null"
+      ),
+    },
   });
-  res.sendApiResponse(result,200)
+  res.sendApiResponse(result, 200);
 };
 
 // query 6
@@ -116,9 +122,9 @@ const functionSix = async (req, res) => {
     group: ["customers.customerNumber"],
     order: [[sequelize.literal("total_orders"), "DESC"]],
   });
-  res.sendApiResponse(result,200);
+  res.sendApiResponse(result, 200);
 };
-
+// query 7
 const functionSeven = async (req, res) => {
   const result = await customers.findAll({
     attributes: [
@@ -135,9 +141,9 @@ const functionSeven = async (req, res) => {
     having: sequelize.literal("average_salary > 1000"),
   });
 
-  res.sendApiResponse(result,200);
+  res.sendApiResponse(result, 200);
 };
-
+// query 8
 const functionEight = async (req, res) => {
   const result = await products.findAll({
     attributes: [
@@ -156,7 +162,41 @@ const functionEight = async (req, res) => {
     group: ["products.productCode", "products.productName"],
   });
 
-  res.sendApiResponse(result,200);
+  res.sendApiResponse(result, 200);
+};
+// qury 9
+
+const functionNine = async (req, res) => {
+  try {
+    const result = await employees.findAll({
+      attributes: ["firstName"],
+      include: [
+        {
+          model: customers,
+          attributes: [],
+          required: false,
+        },
+        {
+          model: offices,
+          attributes: [],
+          //required: true,
+          where: {
+            country: "USA",
+          },
+        },
+      ],
+      where: {
+        employeeNumber: sequelize.literal(
+          "customers.salesRepEmployeeNumber is null"
+        ),
+      },
+
+    });
+    console.table(result);
+    res.sendApiResponse(result,200);
+  } catch (error) {
+    res.sendApiError(error,400);
+  }
 };
 
 const functionEleven = async (req, res) => {
@@ -178,7 +218,7 @@ const functionEleven = async (req, res) => {
     group: ["products.productLine"],
   });
 
-  res.sendApiResponse(result,200);
+  res.sendApiResponse(result, 200);
 };
 const function13 = async (req, res) => {
   const result = await customers.findAll({
@@ -199,7 +239,7 @@ const function13 = async (req, res) => {
     },
   });
 
-  res.sendApiResponse(result,200);
+  res.sendApiResponse(result, 200);
 };
 
 const function10 = async (req, res) => {
@@ -217,7 +257,7 @@ const function10 = async (req, res) => {
     }
   );
 
-  res.sendApiResponse(result,200);
+  res.sendApiResponse(result, 200);
 };
 
 module.exports = {
@@ -232,4 +272,5 @@ module.exports = {
   functionEleven,
   function13,
   function10,
+  functionNine,
 };
