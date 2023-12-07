@@ -9,30 +9,61 @@ const order = require("./orderModel");
 const orderDetail = require("./orderDetailsModel");
 
 // product and productLine 
-productLine.hasMany(product, { foreignKey: 'productLine', targetKey: 'productLine' });
-product.belongsTo(productLine, { foreignKey: 'productLine', targetKey: 'productLine' });
+productLine.hasMany(product, { foreignKey: 'productLine' });
+product.belongsTo(productLine, { foreignKey: 'productLine' });
 
 // product and order Details 
-product.hasMany(orderDetail, { foreignKey: 'productCode', targetKey: 'productCode' });
-orderDetail.belongsTo(product, { foreignKey: 'productCode', targetKey: 'productCode' });
+product.hasMany(orderDetail, { foreignKey: 'productCode'});
+orderDetail.belongsTo(product, { foreignKey: 'productCode' });
 
 // order and order details 
-order.hasMany(orderDetail, { foreignKey: 'orderNumber', targetKey: 'orderNumber' });
-orderDetail.belongsTo(order, { foreignKey: 'orderNumber', targetKey: 'orderNumber' });
+order.hasMany(orderDetail, { foreignKey: 'orderNumber' });
+orderDetail.belongsTo(order, { foreignKey: 'orderNumber' });
 
 // customer and employee
 employee.hasMany(Customer, { foreignKey: 'salesRepEmployeeNumber' });
 Customer.belongsTo(employee, { foreignKey: 'salesRepEmployeeNumber'});
 
 // employee and office 
-office.hasMany(employee, { foreignKey: 'officeCode', targetKey: 'officeCode' });
-employee.belongsTo(office, { foreignKey: 'officeCode', targetKey: 'officeCode' });
+office.hasMany(employee, { foreignKey: 'officeCode' });
+employee.belongsTo(office, { foreignKey: 'officeCode' });
 
 // customer and payment
 Customer.hasMany(Payment, { foreignKey: 'customerNumber' });
-Payment.belongsTo(Customer, { foreignKey: 'customerNumber', targetKey: 'customerNumber' });
+Payment.belongsTo(Customer, { foreignKey: 'customerNumber' });
 
 
 // order and customer
-Customer.hasMany(order, { foreignKey: 'customerNumber', targetKey: 'customerNumber' });
-order.belongsTo(Customer, { foreignKey: 'customerNumber', targetKey: 'customerNumber' });
+Customer.hasMany(order, { foreignKey: 'customerNumber' });
+order.belongsTo(Customer, { foreignKey: 'customerNumber' });
+
+
+// const Customer = require("./customerModel");
+// const Payment = require("./paymentModel");
+// const ProductLine = require("./productLineModel");
+// const Product = require("./productModel");
+// const Employee = require("./employeeModel");
+// const Office = require("./officeModel");
+// const Order = require("./orderModel");
+// const OrderDetail = require("./orderDetailsModel");
+
+// ProductLine.hasMany(Product, { foreignKey: 'productLine' });
+// Product.belongsTo(ProductLine, { foreignKey: 'productLine' });
+
+// Product.hasMany(OrderDetail, { foreignKey: 'productCode' });
+// OrderDetail.belongsTo(Product, { foreignKey: 'productCode' });
+
+// Order.hasMany(OrderDetail, { foreignKey: 'orderNumber' });
+// OrderDetail.belongsTo(Order, { foreignKey: 'orderNumber' });
+
+// Employee.hasMany(Customer, { foreignKey: 'salesRepEmployeeNumber' });
+// Customer.belongsTo(Employee, { foreignKey: 'salesRepEmployeeNumber' });
+
+// Office.hasMany(Employee, { foreignKey: 'officeCode' });
+// Employee.belongsTo(Office, { foreignKey: 'officeCode' });
+
+// Customer.hasMany(Payment, { foreignKey: 'customerNumber' });
+// Payment.belongsTo(Customer, { foreignKey: 'customerNumber' });
+
+// Customer.hasMany(Order, { foreignKey: 'customerNumber' });
+// Order.belongsTo(Customer, { foreignKey: 'customerNumber' });

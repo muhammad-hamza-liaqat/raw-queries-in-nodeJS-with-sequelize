@@ -323,7 +323,7 @@ const funtion15 = async (req, res) => {
   res.sendApiResponse(result, 200);
 };
 
-const function16 = async (req,res) => {
+const function16 = async (req, res) => {
   try {
     const result = await offices.findAll({
       attributes: [
@@ -349,6 +349,64 @@ const function16 = async (req,res) => {
   }
 };
 
+const function17 = async (req, res) => {
+  try {
+    const result = await products.findAll({
+      attributes: [
+        "productLine",
+        [
+          sequelize.fn(
+            "SUM",
+            sequelize.col(
+              "payment.amount"
+            )
+          ),
+          "totalPayment",
+        ],
+      ],
+      include: [
+        {
+          model: orderDetails,
+          attributes: [],
+          include: [
+            {
+              model: orders,
+              attributes: [],
+              include: [
+                {
+                  model: customers,
+                  attributes: [],
+                  include: [
+                    {
+                      model: payments,
+                      attributes: [],
+                      required: false,
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+      group: ["productLine"],
+      order: [[sequelize.literal("totalPayment"), "DESC"]],
+    });
+    res.status(200).json({
+      data: result,
+      message: "Successfully fetched Data details.",
+      status: 200,
+    });
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    res.status(500).json({
+      error: "Internal Server Error",
+      message: "Error fetching product details.",
+      status: 500,
+    });
+  }
+};
+
 module.exports = {
   functionOne,
   functionTwo,
@@ -365,5 +423,6 @@ module.exports = {
   function12,
   function14,
   funtion15,
-  function16
+  function16,
+  function17,
 };

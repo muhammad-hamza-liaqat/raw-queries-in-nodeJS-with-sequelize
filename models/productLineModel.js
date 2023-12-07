@@ -7,6 +7,7 @@ const ProductLine = sequelize.define('productlines', {
     type: DataTypes.STRING(50),
     allowNull: false,
     collate: 'latin1_swedish_ci',
+    primaryKey: true,
   },
   textDescription: {
     type: DataTypes.STRING(4000),
@@ -20,5 +21,7 @@ const ProductLine = sequelize.define('productlines', {
     type: DataTypes.BLOB('medium'),
   },
 });
+
+
 
 module.exports = ProductLine;
