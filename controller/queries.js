@@ -10,13 +10,15 @@ const { Sequelize } = require("sequelize");
 const sequelize = require("../database/connection");
 const sendResFormat = require("../middleware/responseAPI")
 require("../models/association");
+
+// query 1
 const functionOne = async (req, res) => {
   const result = await products.findAll({
     attributes: ["productName", "productLine"],
   });
   res.sendApiResponse(result,200);
 };
-
+// query 2
 const functionTwo = async (req, res) => {
   const result = await customers.findAll({
     attributes: [
@@ -38,6 +40,7 @@ const functionTwo = async (req, res) => {
   });
   res.sendApiResponse(result,200);
 };
+// query 3
 const functionThree = async (req, res) => {
   const result = await payments.findAll({
     attributes: [
@@ -55,6 +58,7 @@ const functionThree = async (req, res) => {
 
   res.sendApiResponse(result,200);
 };
+// query 4
 
 const functionFour = async (req, res) => {
   const result = await products.findAll({
@@ -77,7 +81,7 @@ const functionFour = async (req, res) => {
   });
   res.sendApiResponse(result,200);
 };
-
+// query 6
 const functionSix = async (req, res) => {
   const result = await customers.findAll({
     attributes: [
@@ -99,28 +103,20 @@ const functionSix = async (req, res) => {
   });
   res.sendApiResponse(result,200);
 };
-
+// query 5
 const functionFive = async (req, res) => {
   const result = await employees.findAll({
-    attributes: [
-      [sequelize.fn("DISTINCT", sequelize.col("firstName")), "firstName"],
-    ],
-    include: [
-      {
-        model: customers,
-        attributes: [],
-        required: false,
-        where: {
-          salesRepEmployeeNumber: null,
-        },
-      },
-    ],
-    raw: true,
-    nest: true,
+    attributes: ['firstName'],
+    include: [{
+      model: customers,
+      attributes:[],
+      required: false // LEFT JOIN
+    }],
+    where: { employeeNumber: sequelize.literal('customers.salesRepEmployeeNumber IS null')  }
   });
-
-  res.sendApiResponse(result,200);
+  res.sendApiResponse(result,200)
 };
+
 const functionSeven = async (req, res) => {
   const result = await customers.findAll({
     attributes: [

@@ -21,16 +21,17 @@ order.hasMany(orderDetail, { foreignKey: 'orderNumber', targetKey: 'orderNumber'
 orderDetail.belongsTo(order, { foreignKey: 'orderNumber', targetKey: 'orderNumber' });
 
 // customer and employee
-employee.hasMany(customer, { foreignKey: 'salesRepEmployeeNumber', targetKey: 'employeeNumber' });
-customer.belongsTo(employee, { foreignKey: 'salesRepEmployeeNumber', targetKey: 'employeeNumber' });
+employee.hasMany(Customer, { foreignKey: 'salesRepEmployeeNumber' });
+Customer.belongsTo(employee, { foreignKey: 'salesRepEmployeeNumber'});
 
 // employee and office 
 office.hasMany(employee, { foreignKey: 'officeCode', targetKey: 'officeCode' });
 employee.belongsTo(office, { foreignKey: 'officeCode', targetKey: 'officeCode' });
 
 // customer and payment
-Payment.belongsTo(Customer, { foreignKey: 'customerNumber', targetKey: 'customerNumber' });
 Customer.hasMany(Payment, { foreignKey: 'customerNumber' });
+Payment.belongsTo(Customer, { foreignKey: 'customerNumber', targetKey: 'customerNumber' });
+
 
 // order and customer
 Customer.hasMany(order, { foreignKey: 'customerNumber', targetKey: 'customerNumber' });
