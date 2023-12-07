@@ -9,6 +9,7 @@ const orderDetails = require("../models/orderDetailsModel");
 const { Sequelize } = require("sequelize");
 const sequelize = require("../database/connection");
 const sendResFormat = require("../middleware/responseAPI");
+const ProductLine = require("../models/productLineModel");
 require("../models/association");
 
 // query 1
@@ -263,7 +264,7 @@ const function12 = async (req, res) => {
   // console.table(result)
   res.sendApiResponse(result, 200);
 };
-
+// query 13
 const function13 = async (req, res) => {
   const result = await customers.findAll({
     attributes: [
@@ -286,6 +287,18 @@ const function13 = async (req, res) => {
   res.sendApiResponse(result, 200);
 };
 
+const function14 = async (req, res) => {
+  const result = await products.findAll({
+    attributes: ["productName", "productLine"],
+    include: [{ model: ProductLine, attributes: [] }],
+    right: true,
+    on: {
+      productLine: sequelize.col("productLine"),
+    },
+  });
+  res.sendApiResponse(result,200);
+};
+
 module.exports = {
   functionOne,
   functionTwo,
@@ -300,4 +313,5 @@ module.exports = {
   function10,
   functionNine,
   function12,
+  function14,
 };
