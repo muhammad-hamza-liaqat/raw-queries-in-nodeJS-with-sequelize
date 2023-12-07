@@ -1,4 +1,5 @@
 const winston = require('winston');
+const path = require('path');
 const { DataTypes, Sequelize } = require('sequelize');
 const sequelize = require("../database/connection");
 
@@ -8,20 +9,12 @@ const LogModel = sequelize.define('Log', {
   level: DataTypes.STRING,
   message: DataTypes.STRING,
   meta: DataTypes.JSON,
-  // createdAt: {
-  //   type: DataTypes.DATE,
-  //   allowNull: true
-  // },
-}
-// ,{
-//   timestamps: false
-// }
-);
+});
 
 // Sync the model with the database
 LogModel.sync();
 
-// 
+// Custom transport for Sequelize
 class SequelizeTransport extends winston.Transport {
   constructor(options) {
     super(options);
@@ -33,7 +26,6 @@ class SequelizeTransport extends winston.Transport {
       this.emit('logged', info);
     });
 
-    // 
     LogModel.create({
       level: info.level,
       message: info.message,
@@ -49,13 +41,17 @@ class SequelizeTransport extends winston.Transport {
   }
 }
 
-// Create an instance of the custom transport
+// Define the path for the log file
+const logFilePath = path.join(__dirname, '..', 'api.log');
+
+// Create an instance of the custom Sequelize transport
 const sequelizeTransport = new SequelizeTransport();
 
-// Create the Winston logger with both console and Sequelize transports
+// Create the Winston logger with Console, File, and Sequelize transports
 const logger = winston.createLogger({
   transports: [
     new winston.transports.Console({ format: winston.format.simple() }),
+    new winston.transports.File({ filename: logFilePath }),
     sequelizeTransport,
   ],
 });

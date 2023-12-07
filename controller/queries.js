@@ -81,6 +81,21 @@ const functionFour = async (req, res) => {
   });
   res.sendApiResponse(result,200);
 };
+
+// query 5
+const functionFive = async (req, res) => {
+  const result = await employees.findAll({
+    attributes: ['firstName'],
+    include: [{
+      model: customers,
+      attributes:[],
+      required: false // LEFT JOIN
+    }],
+    where: { employeeNumber: sequelize.literal('customers.salesRepEmployeeNumber IS null')  }
+  });
+  res.sendApiResponse(result,200)
+};
+
 // query 6
 const functionSix = async (req, res) => {
   const result = await customers.findAll({
@@ -102,19 +117,6 @@ const functionSix = async (req, res) => {
     order: [[sequelize.literal("total_orders"), "DESC"]],
   });
   res.sendApiResponse(result,200);
-};
-// query 5
-const functionFive = async (req, res) => {
-  const result = await employees.findAll({
-    attributes: ['firstName'],
-    include: [{
-      model: customers,
-      attributes:[],
-      required: false // LEFT JOIN
-    }],
-    where: { employeeNumber: sequelize.literal('customers.salesRepEmployeeNumber IS null')  }
-  });
-  res.sendApiResponse(result,200)
 };
 
 const functionSeven = async (req, res) => {
