@@ -296,7 +296,30 @@ const function14 = async (req, res) => {
       productLine: sequelize.col("productLine"),
     },
   });
-  res.sendApiResponse(result,200);
+  res.sendApiResponse(result, 200);
+};
+
+const funtion15 = async (req, res) => {
+  const result = await customers.findAll({
+    attributes: ["customerName"],
+    // attributes: [
+    //   "customerName",
+    //   [sequelize.fn("COUNT", sequelize.col("amount")), "paymentCount"],
+    // ],
+
+    include: [
+      {
+        model: payments,
+        attributes: [
+          // [sequelize.fn("SUM", sequelize.col("amount")), "totalAmount"],
+          "amount",
+          "paymentDate",
+          "checkNumber",
+        ],
+      },
+    ],
+  });
+  res.sendApiResponse(result, 200);
 };
 
 module.exports = {
@@ -314,4 +337,5 @@ module.exports = {
   functionNine,
   function12,
   function14,
+  funtion15,
 };

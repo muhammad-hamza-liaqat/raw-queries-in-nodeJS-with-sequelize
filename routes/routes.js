@@ -16,6 +16,7 @@ const {
   functionNine,
   function12,
   function14,
+  funtion15,
 } = require("../controller/queries");
 module.exports = queryRoute;
 
@@ -33,3 +34,4 @@ queryRoute.route("/11").get(functionEleven);
 queryRoute.route("/12").get(function12);
 queryRoute.route("/13").get(function13);
 queryRoute.route("/14").get(function14);
+queryRoute.route("/15").get(funtion15)
