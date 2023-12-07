@@ -301,25 +301,52 @@ const function14 = async (req, res) => {
 
 const funtion15 = async (req, res) => {
   const result = await customers.findAll({
-    attributes: ["customerName"],
-    // attributes: [
-    //   "customerName",
-    //   [sequelize.fn("COUNT", sequelize.col("amount")), "paymentCount"],
-    // ],
+    // attributes: ["customerName"],
+    attributes: [
+      "customerName",
+      [sequelize.fn("SUM", sequelize.col("amount")), "total_payment"],
+    ],
 
     include: [
       {
         model: payments,
         attributes: [
-          // [sequelize.fn("SUM", sequelize.col("amount")), "totalAmount"],
-          "amount",
+          [sequelize.fn("SUM", sequelize.col("amount")), "totalAmount"],
+          // "amount",
           "paymentDate",
           "checkNumber",
         ],
       },
     ],
+    group: ["customers.customerName"],
   });
   res.sendApiResponse(result, 200);
+};
+
+const function16 = async (req,res) => {
+  try {
+    const result = await offices.findAll({
+      attributes: [
+        [
+          sequelize.fn("COUNT", sequelize.col("employees.employeeNumber")),
+          "numberOfEmployee",
+        ],
+        "city",
+      ],
+      include: [
+        {
+          model: employees,
+          attributes: [],
+          required: false, // Use LEFT JOIN by setting required to false
+        },
+      ],
+      group: ["offices.officeCode"],
+    });
+
+    res.sendApiResponse(result, 200);
+  } catch (error) {
+    res.sendApiError(error, 200);
+  }
 };
 
 module.exports = {
@@ -338,4 +365,5 @@ module.exports = {
   function12,
   function14,
   funtion15,
+  function16
 };
