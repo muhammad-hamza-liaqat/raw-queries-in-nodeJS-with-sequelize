@@ -190,15 +190,33 @@ const functionNine = async (req, res) => {
           "customers.salesRepEmployeeNumber is null"
         ),
       },
-
     });
     console.table(result);
-    res.sendApiResponse(result,200);
+    res.sendApiResponse(result, 200);
   } catch (error) {
-    res.sendApiError(error,400);
+    res.sendApiError(error, 400);
   }
 };
 
+// query 10
+const function10 = async (req, res) => {
+  const result = await sequelize.query(
+    "SELECT products.productName, COUNT(orderdetails.orderNumber) AS numberOfOrders " +
+      "FROM orderdetails " +
+      "JOIN products ON orderdetails.productCode = products.productCode " +
+      "JOIN orders ON orderdetails.orderNumber = orders.orderNumber " +
+      "JOIN customers ON customers.customerNumber = orders.customerNumber " +
+      'WHERE customers.country = "USA" ' +
+      "GROUP BY products.productName " +
+      "ORDER BY COUNT(orderdetails.orderNumber) DESC",
+    {
+      type: sequelize.QueryTypes.SELECT,
+    }
+  );
+
+  res.sendApiResponse(result, 200);
+};
+// query 11
 const functionEleven = async (req, res) => {
   const result = await products.findAll({
     attributes: [
@@ -220,6 +238,32 @@ const functionEleven = async (req, res) => {
 
   res.sendApiResponse(result, 200);
 };
+// query 12
+
+const function12 = async (req, res) => {
+  const result = await customers.findAll({
+    attributes: [
+      "customerName",
+      [sequelize.col("orders.orderNumber"), "orderNumber"],
+      [sequelize.col("payments.amount"), "PaymentAmount"],
+    ],
+    include: [
+      {
+        model: orders,
+        attributes: [],
+      },
+      {
+        model: payments,
+        attributes: [],
+      },
+    ],
+    having: sequelize.literal("orderNumber IS NOT NULL"),
+    order: [["orderNumber", "ASC"]],
+  });
+  // console.table(result)
+  res.sendApiResponse(result, 200);
+};
+
 const function13 = async (req, res) => {
   const result = await customers.findAll({
     attributes: [
@@ -242,24 +286,6 @@ const function13 = async (req, res) => {
   res.sendApiResponse(result, 200);
 };
 
-const function10 = async (req, res) => {
-  const result = await sequelize.query(
-    "SELECT products.productName, COUNT(orderdetails.orderNumber) AS numberOfOrders " +
-      "FROM orderdetails " +
-      "JOIN products ON orderdetails.productCode = products.productCode " +
-      "JOIN orders ON orderdetails.orderNumber = orders.orderNumber " +
-      "JOIN customers ON customers.customerNumber = orders.customerNumber " +
-      'WHERE customers.country = "USA" ' +
-      "GROUP BY products.productName " +
-      "ORDER BY COUNT(orderdetails.orderNumber) DESC",
-    {
-      type: sequelize.QueryTypes.SELECT,
-    }
-  );
-
-  res.sendApiResponse(result, 200);
-};
-
 module.exports = {
   functionOne,
   functionTwo,
@@ -273,4 +299,5 @@ module.exports = {
   function13,
   function10,
   functionNine,
+  function12,
 };
