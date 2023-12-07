@@ -1,5 +1,3 @@
-// genericResponseMiddleware.js
-
 const genericResponseMiddleware = (req, res, next) => {
   res.sendApiResponse = (data, message = "Success", statusCode = 200) => {
     res.status(statusCode).json({
