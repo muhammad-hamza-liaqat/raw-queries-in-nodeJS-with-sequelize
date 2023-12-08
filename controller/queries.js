@@ -288,7 +288,7 @@ const function13 = async (req, res) => {
 
   res.sendApiResponse(result, 200);
 };
-
+// query 14
 const function14 = async (req, res) => {
   const result = await products.findAll({
     attributes: ["productName", "productLine"],
@@ -300,7 +300,7 @@ const function14 = async (req, res) => {
   });
   res.sendApiResponse(result, 200);
 };
-
+// query 15
 const funtion15 = async (req, res) => {
   const result = await customers.findAll({
     // attributes: ["customerName"],
@@ -324,7 +324,7 @@ const funtion15 = async (req, res) => {
   });
   res.sendApiResponse(result, 200);
 };
-
+// query 16
 const function16 = async (req, res) => {
   try {
     const result = await offices.findAll({
@@ -350,7 +350,7 @@ const function16 = async (req, res) => {
     res.sendApiError(error, 200);
   }
 };
-
+// query 17
 const function17 = async (req, res) => {
   const result = await productLines.findAll({
     attributes: [
@@ -392,7 +392,7 @@ const function17 = async (req, res) => {
   });
   res.sendApiResponse(result, 200);
 };
-
+// query 18
 const function18 = async (req, res) => {
   try {
     const result = await payments.findAll({
@@ -428,6 +428,7 @@ const function18 = async (req, res) => {
     res.sendApiError(error, 400);
   }
 };
+// query 19
 
 const function19 = async (req, res) => {
   try {
