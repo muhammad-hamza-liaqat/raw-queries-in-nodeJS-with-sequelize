@@ -9,6 +9,7 @@ const LogModel = sequelize.define('Log', {
   level: DataTypes.STRING,
   message: DataTypes.STRING,
   meta: DataTypes.JSON,
+  statusCode: DataTypes.INTEGER,
 });
 
 // Sync the model with the database
@@ -26,10 +27,13 @@ class SequelizeTransport extends winston.Transport {
       this.emit('logged', info);
     });
 
+
     LogModel.create({
+      timestamp: info.timestamp,
       level: info.level,
       message: info.message,
       meta: info.meta,
+      statusCode: info.statusCode,
     })
       .then(() => {
         callback(null, true);
