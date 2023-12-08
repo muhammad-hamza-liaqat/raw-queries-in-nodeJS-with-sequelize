@@ -425,7 +425,29 @@ const function18 = async (req, res) => {
     }
     res.sendApiResponse(result, 200);
   } catch (error) {
-    res.sendApiError(error,400);
+    res.sendApiError(error, 400);
+  }
+};
+
+const function19 = async (req, res) => {
+  try {
+    const query = `
+      UPDATE products
+      SET buyPrice = CASE
+        WHEN productLine = 'Motorcycles' THEN ROUND(buyPrice * 0.85)
+        WHEN productLine = 'Ships' THEN ROUND(buyPrice * 0.80)
+        ELSE buyPrice
+      END
+      WHERE productLine IN ('Motorcycles', 'Ships');
+    `;
+
+    const [result] = await sequelize.query(query);
+
+    // Assuming you want to send a response back
+    res.sendApiResponse(result, 200);
+  } catch (error) {
+    console.error("Error during update:", error);
+    res.sendApiError(error, 400);
   }
 };
 
@@ -448,4 +470,5 @@ module.exports = {
   function16,
   function17,
   function18,
+  function19,
 };

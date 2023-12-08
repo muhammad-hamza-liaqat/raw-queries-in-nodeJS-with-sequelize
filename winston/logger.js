@@ -29,7 +29,7 @@ class SequelizeTransport extends winston.Transport {
 
 
     LogModel.create({
-      timestamp: info.timestamp,
+      // timestamp: info.timestamp,
       level: info.level,
       message: info.message,
       meta: info.meta,
