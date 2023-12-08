@@ -12,6 +12,8 @@ const sendResFormat = require("../middleware/responseAPI");
 const ProductLine = require("../models/productLineModel");
 require("../models/association");
 
+sequelize.options.logging = console.log;
+
 // query 1
 const functionOne = async (req, res) => {
   const result = await products.findAll({
@@ -350,61 +352,45 @@ const function16 = async (req, res) => {
 };
 
 const function17 = async (req, res) => {
-  try {
-    const result = await products.findAll({
-      attributes: [
-        "productLine",
-        [
-          sequelize.fn(
-            "SUM",
-            sequelize.col(
-              "payment.amount"
-            )
-          ),
-          "totalPayment",
+  const result = await productLines.findAll({
+    attributes: [
+      "productLine",
+      [sequelize.fn("SUM", sequelize.col("amount")), "Total_SUM"],
+    ],
+    include: [
+      {
+        model: products,
+        attributes: [],
+        include: [
+          {
+            model: orderDetails,
+            attributes: [],
+            include: [
+              {
+                model: orders,
+                attributes: [],
+                include: [
+                  {
+                    model: customers,
+                    attributes: [],
+                    include: [
+                      {
+                        model: payments,
+                        attributes: [],
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
         ],
-      ],
-      include: [
-        {
-          model: orderDetails,
-          attributes: [],
-          include: [
-            {
-              model: orders,
-              attributes: [],
-              include: [
-                {
-                  model: customers,
-                  attributes: [],
-                  include: [
-                    {
-                      model: payments,
-                      attributes: [],
-                      required: false,
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-      ],
-      group: ["productLine"],
-      order: [[sequelize.literal("totalPayment"), "DESC"]],
-    });
-    res.status(200).json({
-      data: result,
-      message: "Successfully fetched Data details.",
-      status: 200,
-    });
-  } catch (error) {
-    console.error("Error fetching products:", error);
-    res.status(500).json({
-      error: "Internal Server Error",
-      message: "Error fetching product details.",
-      status: 500,
-    });
-  }
+      },
+    ],
+    group: ["productLine"],
+    raw: true,
+  });
+  res.sendApiResponse(result, 200);
 };
 
 module.exports = {
