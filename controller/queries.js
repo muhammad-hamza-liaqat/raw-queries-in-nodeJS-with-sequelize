@@ -432,16 +432,19 @@ const function18 = async (req, res) => {
 const function19 = async (req, res) => {
   try {
     const query = `
-      UPDATE products
-      SET buyPrice = CASE
-        WHEN productLine = 'Motorcycles' THEN ROUND(buyPrice * 0.85)
-        WHEN productLine = 'Ships' THEN ROUND(buyPrice * 0.80)
-        ELSE buyPrice
-      END
+      SELECT
+        productLine,
+        buyPrice AS previousPrice,
+        CASE
+          WHEN productLine = 'Motorcycles' THEN ROUND(buyPrice * 0.85)
+          WHEN productLine = 'Ships' THEN ROUND(buyPrice * 0.80)
+          ELSE buyPrice
+        END AS updatedPrice
+      FROM products
       WHERE productLine IN ('Motorcycles', 'Ships');
     `;
 
-    const [result] = await sequelize.query(query);
+    const [result] = await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
 
     // Assuming you want to send a response back
     res.sendApiResponse(result, 200);
@@ -450,6 +453,7 @@ const function19 = async (req, res) => {
     res.sendApiError(error, 400);
   }
 };
+
 
 module.exports = {
   functionOne,
