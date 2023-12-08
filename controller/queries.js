@@ -393,6 +393,42 @@ const function17 = async (req, res) => {
   res.sendApiResponse(result, 200);
 };
 
+const function18 = async (req, res) => {
+  try {
+    const result = await payments.findAll({
+      attributes: [
+        "customerNumber",
+        [sequelize.fn("SUM", sequelize.col("amount")), "total_amount"],
+      ],
+      include: [
+        {
+          model: customers,
+          attributes: [],
+          required: true,
+        },
+      ],
+      group: ["customerNumber"],
+    });
+    for (const paymentTotal of result) {
+      const customerNumber = paymentTotal.getDataValue("customerNumber");
+      const totalAmount = paymentTotal.getDataValue("total_amount");
+      const customer = await customers.findByPk(customerNumber);
+      if (customer) {
+        let updatedCreditLimit;
+        if (totalAmount > 1000) {
+          updatedCreditLimit = Math.round(customer.creditLimit * 1.1);
+        } else {
+          updatedCreditLimit = Math.min(customer.creditLimit, 50000);
+        }
+        await customer.update({ creditLimit: updatedCreditLimit });
+      }
+    }
+    res.sendApiResponse(result, 200);
+  } catch (error) {
+    res.sendApiError(error,400);
+  }
+};
+
 module.exports = {
   functionOne,
   functionTwo,
@@ -411,4 +447,5 @@ module.exports = {
   funtion15,
   function16,
   function17,
+  function18,
 };
