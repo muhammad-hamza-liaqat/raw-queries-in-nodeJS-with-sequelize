@@ -35,30 +35,27 @@ app.use((req, res, next) => {
   const logData = {
     level: req.method,
     message: req.url,
-    meta: req.headers, // Use req.headers instead of req.header
+    meta: req.headers,
   };
   let responseSent = false;
   res.on('finish', () => {
     // Ensure the response has not been logged before
     if (!responseSent) {
-      // Log additional information after the response is sent
+      // addition information
       logData.statusCode = res.statusCode;
       LogModel.create(logData)
         .then(() => {
-          // Mark that the response has been logged
           responseSent = true;
-          // Continue with the Express middleware chain
           next();
         })
         .catch((error) => {
-          // Log an error if there's an issue saving the log entry
+          // if error
           console.error('Error saving log entry to Sequelize:', error);
-          // Continue with the Express middleware chain
           next();
         });
     }
   });
-  // Continue with the Express middleware chain
+
   next();
 });
 // routes
