@@ -4,13 +4,13 @@ const { DataTypes, Sequelize } = require('sequelize');
 const sequelize = require("../database/connection");
 
 // model for Log 
-const LogModel = sequelize.define('Log2', {
+const LogModel = sequelize.define('Log23', {
   timestamp: { type: DataTypes.DATE, defaultValue: Sequelize.fn('now') },
   level: DataTypes.STRING,
   message: DataTypes.STRING,
   meta: DataTypes.JSON,
   statusCode: DataTypes.INTEGER,
-  separateStatusCode: DataTypes.INTEGER,
+  // separateStatusCode: DataTypes.INTEGER,
 });
 
 // Sync the model with the database
@@ -35,8 +35,8 @@ class SequelizeTransport extends winston.Transport {
       level: info.level,
       message: info.message,
       meta: info.meta || {},
-      statusCode: 200,
-      separateStatusCode: 200,
+      statusCode: info.statusCode,
+      // separateStatusCode: 200,
       query: info.query,
     })
       .then((createdLog) => {
