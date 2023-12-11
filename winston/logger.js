@@ -36,7 +36,7 @@ class SequelizeTransport extends winston.Transport {
       message: info.message,
       meta: info.meta || {},
       statusCode: 200,
-      separateStatusCode: 201,
+      separateStatusCode: 200,
       query: info.query,
     })
       .then((createdLog) => {

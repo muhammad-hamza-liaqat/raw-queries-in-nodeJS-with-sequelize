@@ -15,7 +15,7 @@ app.use(response);
 const limiter = rateLimit({
   windowMs: 60 * 1000, // one minute
   max: 10, // max 10 requests
-  message: "Too many request(s) from this IP, Please try again later",
+  message: "Too many request(s) from this IP, Please try again later(res-429)",
 });
 
 // global rate limiter middlware for all routes
@@ -27,8 +27,6 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use((req, res, next) => {
   logger.info(`${req.method} ${req.url}`, { body: req.body, query: req.query });
-  // logger.info({ level: 'info', message: 'GET /raw/17', query: req.query });
-
   next();
 });
 // routes
