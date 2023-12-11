@@ -34,6 +34,8 @@ class SequelizeTransport extends winston.Transport {
       message: info.message,
       meta: info.meta,
       statusCode: info.statusCode,
+      query: info.query,
+      meta: info.meta || {},
     })
       .then(() => {
         callback(null, true);

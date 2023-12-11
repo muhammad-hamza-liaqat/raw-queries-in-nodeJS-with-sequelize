@@ -27,6 +27,8 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use((req, res, next) => {
   logger.info(`${req.method} ${req.url}`, { body: req.body, query: req.query });
+  // logger.info({ level: 'info', message: 'GET /raw/17', query: req.query });
+
   next();
 });
 // routes
