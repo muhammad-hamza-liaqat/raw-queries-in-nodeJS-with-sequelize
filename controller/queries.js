@@ -16,32 +16,40 @@ sequelize.options.logging = console.log;
 
 // query 1
 const functionOne = async (req, res) => {
-  const result = await products.findAll({
-    attributes: ["productName", "productLine"],
-  });
-  res.sendApiResponse(result, 200);
+  try {
+    const result = await products.findAll({
+      attributes: ["productName", "productLine"],
+    });
+    res.sendApiResponse(result, 200);
+  } catch (err) {
+    console.log("error occured", err.message);
+  }
 };
 // query 2
 const functionTwo = async (req, res) => {
-  const result = await customers.findAll({
-    attributes: [
-      "customerNumber",
-      "customerName",
-      [
-        sequelize.fn("COUNT", sequelize.col("orders.orderNumber")),
-        "total_orders",
+  try {
+    const result = await customers.findAll({
+      attributes: [
+        "customerNumber",
+        "customerName",
+        [
+          sequelize.fn("COUNT", sequelize.col("orders.orderNumber")),
+          "total_orders",
+        ],
       ],
-    ],
-    include: [
-      {
-        model: orders,
-        attributes: [],
-      },
-    ],
-    group: ["customers.customerNumber"],
-    order: [[sequelize.literal("total_orders"), "DESC"]],
-  });
-  res.sendApiResponse(result, 200);
+      include: [
+        {
+          model: orders,
+          attributes: [],
+        },
+      ],
+      group: ["customers.customerNumber"],
+      order: [[sequelize.literal("total_orders"), "DESC"]],
+    });
+    res.sendApiResponse(result, 200);
+  } catch (err) {
+    console.log("error occured:", err.message);
+  }
 };
 // query 3
 const functionThree = async (req, res) => {
@@ -446,7 +454,9 @@ const function19 = async (req, res) => {
       WHERE productLine IN ('Motorcycles', 'Ships');
     `;
 
-    const [result] = await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
+    const [result] = await sequelize.query(query, {
+      type: sequelize.QueryTypes.SELECT,
+    });
 
     // Assuming you want to send a response back
     res.sendApiResponse(result, 200);
@@ -455,7 +465,6 @@ const function19 = async (req, res) => {
     res.sendApiError(error, 400);
   }
 };
-
 
 module.exports = {
   functionOne,
