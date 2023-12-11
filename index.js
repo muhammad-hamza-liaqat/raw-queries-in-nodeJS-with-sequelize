@@ -6,17 +6,17 @@ const rateLimit = require("express-rate-limit");
 const connection = require("./database/connection");
 const queryRoute = require("./routes/routes");
 require("./models/association");
-const {logger} = require("./winston/logger")
+const { logger } = require("./winston/logger");
 // response format
 const response = require("./middleware/responseAPI");
 app.use(response);
-const {LogModel} = require("./winston/logger")
+const { LogModel } = require("./winston/logger");
 
 // express-rate-limit
 const limiter = rateLimit({
   windowMs: 60 * 1000, // one minute
   max: 10, // max 10 requests
-  message: "Too many request(s) from this IP, Please try again later(res-429)",
+  message: "you have requested too many request(s), Please try again later.(RES-429)",
 });
 
 // global rate limiter middlware for all routes
@@ -38,7 +38,7 @@ app.use((req, res, next) => {
     meta: req.headers,
   };
   let responseSent = false;
-  res.on('finish', () => {
+  res.on("finish", () => {
     // Ensure the response has not been logged before
     if (!responseSent) {
       // addition information
@@ -50,7 +50,7 @@ app.use((req, res, next) => {
         })
         .catch((error) => {
           // if error
-          console.error('Error saving log entry to Sequelize:', error);
+          console.error("Error saving log entry to Sequelize:", error);
           next();
         });
     }
@@ -65,4 +65,3 @@ app.use("/raw", queryRoute);
 app.listen(port, () => {
   console.log(`server running at localhost:/${port}`);
 });
-

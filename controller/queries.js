@@ -438,6 +438,7 @@ const function19 = async (req, res) => {
         buyPrice AS previousPrice,
         CASE
           WHEN productLine = 'Motorcycles' THEN ROUND(buyPrice * 0.85)
+
           WHEN productLine = 'Ships' THEN ROUND(buyPrice * 0.80)
           ELSE buyPrice
         END AS updatedPrice
