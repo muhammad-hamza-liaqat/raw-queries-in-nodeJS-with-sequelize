@@ -3,7 +3,7 @@ const path = require('path');
 const { DataTypes, Sequelize } = require('sequelize');
 const sequelize = require("../database/connection");
 
-// Model for Log 
+// Model for Log
 const LogModel = sequelize.define('Log23', {
   timestamp: {
     type: DataTypes.DATE,
@@ -63,6 +63,8 @@ class SequelizeTransport extends winston.Transport {
       this.emit('logged', info);
     });
 
+    console.log('Attempting to log to Sequelize:', info);
+
     LogModel.create({
       timestamp: info.timestamp,
       level: info.level,
@@ -83,7 +85,7 @@ class SequelizeTransport extends winston.Transport {
 }
 
 // Directory path for the log file
-const logFilePath = path.join(__dirname, ".." ,'api.log');
+const logFilePath = path.join(__dirname, '..', 'api.log');
 
 // Custom transport for File
 const fileTransport = new winston.transports.File({
@@ -91,8 +93,16 @@ const fileTransport = new winston.transports.File({
   level: 'silly', // Log info level and below to the file
 });
 
-// Instantiate the Sequelize transport
+// Add an error event listener to the Sequelize transport
 const sequelizeTransport = new SequelizeTransport();
+sequelizeTransport.on('error', (err) => {
+  console.error('Sequelize transport error:', err);
+});
+
+// Add an error event listener to the file transport
+fileTransport.on('error', (err) => {
+  console.error('File transport error:', err);
+});
 
 // Create a logger with both transports
 const logger = winston.createLogger({
@@ -103,10 +113,8 @@ const logger = winston.createLogger({
   ],
 });
 
-// Log an initial message to verify if the log file is being created
-// logger.info('Initial log message');
-// logger.info('Subsequent log message 1');
-// logger.info('Subsequent log message 2');
+// Log the file path for debugging
+console.log('Log file path:', logFilePath);
 
 
 module.exports = { logger, LogModel };

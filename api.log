@@ -1,0 +1,2 @@
+{"level":"info","message":"This is an info log message for both transports"}
+{"level":"silly","message":"This is a silly log message for file transport"}
