@@ -83,12 +83,12 @@ class SequelizeTransport extends winston.Transport {
 }
 
 // Directory path for the log file
-const logFilePath = path.join(__dirname, '..', 'api.log');
+const logFilePath = path.join(__dirname, ".." ,'api.log');
 
 // Custom transport for File
 const fileTransport = new winston.transports.File({
   filename: logFilePath,
-  level: 'info', // Log info level and below to the file
+  level: 'silly', // Log info level and below to the file
 });
 
 // Instantiate the Sequelize transport
@@ -104,6 +104,9 @@ const logger = winston.createLogger({
 });
 
 // Log an initial message to verify if the log file is being created
-logger.info('Initial log message');
+// logger.info('Initial log message');
+// logger.info('Subsequent log message 1');
+// logger.info('Subsequent log message 2');
+
 
 module.exports = { logger, LogModel };
