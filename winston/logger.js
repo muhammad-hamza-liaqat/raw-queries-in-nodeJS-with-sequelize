@@ -5,13 +5,50 @@ const sequelize = require("../database/connection");
 
 // model for Log 
 const LogModel = sequelize.define('Log23', {
-  timestamp: { type: DataTypes.DATE, defaultValue: Sequelize.fn('now') },
-  level: DataTypes.STRING,
-  message: DataTypes.STRING,
-  meta: DataTypes.JSON,
-  statusCode: DataTypes.INTEGER,
-  // separateStatusCode: DataTypes.INTEGER,
+  timestamp: {
+    type: DataTypes.DATE,
+    defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+    allowNull: false,
+  },
+  level: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  message: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  userAgent: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  accept: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  postmanToken: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  host: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  acceptEncoding: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  connection: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  statusCode: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
 });
+
+LogModel.sync();
 
 // Sync the model with the database
 LogModel.sync();

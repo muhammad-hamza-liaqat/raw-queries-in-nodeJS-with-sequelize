@@ -31,32 +31,28 @@ app.use(express.urlencoded({ extended: true }));
 //   next();
 // });
 app.use((req, res, next) => {
-  // Log request details
   const logData = {
     level: req.method,
     message: req.url,
-    meta: req.headers,
+    userAgent: req.headers['user-agent'],
+    accept: req.headers.accept,
+    postmanToken: req.headers['postman-token'],
+    host: req.headers.host,
+    acceptEncoding: req.headers['accept-encoding'],
+    connection: req.headers.connection,
+    statusCode: res.statusCode,
   };
-  let responseSent = false;
-  res.on("finish", () => {
-    // Ensure the response has not been logged before
-    if (!responseSent) {
-      // addition information
-      logData.statusCode = res.statusCode;
-      LogModel.create(logData)
-        .then(() => {
-          responseSent = true;
-          next();
-        })
-        .catch((error) => {
-          // if error
-          console.error("Error saving log entry to Sequelize:", error);
-          next();
-        });
-    }
-  });
 
-  next();
+  // Your existing code for saving the log entry
+  LogModel.create(logData)
+    .then(() => {
+      console.log(logData);
+      next();
+    })
+    .catch((error) => {
+      console.error("Error saving log entry to Sequelize:", error);
+      next();
+    });
 });
 // routes
 app.use("/raw", queryRoute);
