@@ -32,7 +32,9 @@ app.use(express.urlencoded({ extended: true }));
 //   next();
 // });
 app.use((req, res, next) => {
-  const logData = {
+ var logData={};
+ res.on('finish',async ()=>{
+  logData = {
     level: req.method,
     message: req.url,
     userAgent: req.headers["user-agent"],
@@ -41,18 +43,22 @@ app.use((req, res, next) => {
     host: req.headers.host,
     acceptEncoding: req.headers["accept-encoding"],
     connection: req.headers.connection,
-    statusCode: res.statusCode,
+    statusCode: res.statusCode ,
   };
-
   LogModel.create(logData)
     .then(() => {
       console.log(logData);
-      next();
+      
     })
-    .catch((error) => {
-      console.error("Error saving log entry to Sequelize:", error);
-      next();
-    });
+ })
+ console.log(logData); 
+ next();
+
+  
+    // .catch((error) => {
+    //   console.error("Error saving log entry to Sequelize:", error);
+    //   next();
+    // });
 });
 // app.set("view engine", "ejs");
 // app.set("views", "./views");
@@ -61,6 +67,8 @@ app.use("/raw", queryRoute);
 // app.use(function(req,res,next){
 //   res.status(404).render('404')
 // });
+
+
 
 // server port
 app.listen(port, () => {

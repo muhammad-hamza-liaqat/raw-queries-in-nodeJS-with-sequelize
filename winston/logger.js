@@ -1,13 +1,13 @@
-const winston = require('winston');
-const path = require('path');
-const { DataTypes, Sequelize } = require('sequelize');
+const winston = require("winston");
+const path = require("path");
+const { DataTypes, Sequelize } = require("sequelize");
 const sequelize = require("../database/connection");
 
 // Model for Log
-const LogModel = sequelize.define('Log23', {
+const LogModel = sequelize.define("Log23", {
   timestamp: {
     type: DataTypes.DATE,
-    defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+    defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
     allowNull: false,
   },
   level: {
@@ -55,53 +55,53 @@ LogModel.sync();
 class SequelizeTransport extends winston.Transport {
   constructor(options) {
     super(options);
-    this.name = 'SequelizeTransport';
+    this.name = "SequelizeTransport";
   }
 
   log(info, callback) {
     setImmediate(() => {
-      this.emit('logged', info);
+      this.emit("logged", info);
     });
 
-    console.log('Attempting to log to Sequelize:', info);
+    console.log("Attempting to log to Sequelize:", info);
 
     LogModel.create({
       timestamp: info.timestamp,
       level: info.level,
       message: info.message,
       meta: info.meta || {},
-      statusCode: info.statusCode,
+      statusCode: info.statusCode || 404,
       query: info.query,
     })
       .then((createdLog) => {
-        console.log('Created Log Entry:', createdLog);
+        console.log("Created Log Entry:", createdLog);
         callback(null, true);
       })
       .catch((error) => {
-        console.error('Error saving log entry to Sequelize:', error);
+        console.error("Error saving log entry to Sequelize:", error);
         callback(error);
       });
   }
 }
 
 // Directory path for the log file
-const logFilePath = path.join(__dirname, '..', 'api.log');
+const logFilePath = path.join(__dirname, "..", "api.log");
 
 // Custom transport for File
 const fileTransport = new winston.transports.File({
   filename: logFilePath,
-  level: 'silly', // Log info level and below to the file
+  level: "silly", // Log info level and below to the file
 });
 
 // Add an error event listener to the Sequelize transport
 const sequelizeTransport = new SequelizeTransport();
-sequelizeTransport.on('error', (err) => {
-  console.error('Sequelize transport error:', err);
+sequelizeTransport.on("error", (err) => {
+  console.error("Sequelize transport error:", err);
 });
 
 // Add an error event listener to the file transport
-fileTransport.on('error', (err) => {
-  console.error('File transport error:', err);
+fileTransport.on("error", (err) => {
+  console.error("File transport error:", err);
 });
 
 // Create a logger with both transports
@@ -114,7 +114,6 @@ const logger = winston.createLogger({
 });
 
 // Log the file path for debugging
-console.log('Log file path:', logFilePath);
-
+console.log("Log file path:", logFilePath);
 
 module.exports = { logger, LogModel };
