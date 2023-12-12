@@ -54,8 +54,13 @@ app.use((req, res, next) => {
       next();
     });
 });
+// app.set("view engine", "ejs");
+// app.set("views", "./views");
 // routes
 app.use("/raw", queryRoute);
+// app.use(function(req,res,next){
+//   res.status(404).render('404')
+// });
 
 // server port
 app.listen(port, () => {
