@@ -151,3 +151,4 @@
 {"body":{},"level":"info","message":"GET /favicon.ico","query":{}}
 {"body":{},"level":"info","message":"GET /raw/2","query":{}}
 {"body":{},"level":"info","message":"GET /raw/17","query":{}}
+{"level":"info","message":"Initial log message"}

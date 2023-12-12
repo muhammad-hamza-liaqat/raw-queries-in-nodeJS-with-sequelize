@@ -16,7 +16,8 @@ const { LogModel } = require("./winston/logger");
 const limiter = rateLimit({
   windowMs: 60 * 1000, // one minute
   max: 10, // max 10 requests
-  message: "you have requested too many request(s), Please try again later.(RES-429)",
+  message:
+    "you have requested too many request(s), Please try again later.(RES-429)",
 });
 
 // global rate limiter middlware for all routes
@@ -34,16 +35,15 @@ app.use((req, res, next) => {
   const logData = {
     level: req.method,
     message: req.url,
-    userAgent: req.headers['user-agent'],
+    userAgent: req.headers["user-agent"],
     accept: req.headers.accept,
-    postmanToken: req.headers['postman-token'],
+    postmanToken: req.headers["postman-token"],
     host: req.headers.host,
-    acceptEncoding: req.headers['accept-encoding'],
+    acceptEncoding: req.headers["accept-encoding"],
     connection: req.headers.connection,
     statusCode: res.statusCode,
   };
 
-  // Your existing code for saving the log entry
   LogModel.create(logData)
     .then(() => {
       console.log(logData);
