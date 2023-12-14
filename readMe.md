@@ -39,6 +39,7 @@ api.log file is saving the log locally in the project folder.
 
 
 ![Alt text](image.png)
+![Alt text](image-1.png)
 
 
 <!-- another method to log the things into the database with sequelize without using any npm module -->
