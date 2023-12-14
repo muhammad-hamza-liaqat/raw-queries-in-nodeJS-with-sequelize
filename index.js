@@ -43,7 +43,7 @@ app.use((req, res, next) => {
     host: req.headers.host,
     acceptEncoding: req.headers["accept-encoding"],
     connection: req.headers.connection,
-    statusCode: res.statusCode ,
+    statusCode: res.statusCode,
   };
   LogModel.create(logData)
     .then(() => {
@@ -60,13 +60,13 @@ app.use((req, res, next) => {
     //   next();
     // });
 });
-// app.set("view engine", "ejs");
-// app.set("views", "./views");
+app.set("view engine", "ejs");
+app.set("views", "./views");
 // routes
 app.use("/raw", queryRoute);
-// app.use(function(req,res,next){
-//   res.status(404).render('404')
-// });
+app.use(function(req,res,next){
+  res.status(404).render('404')
+});
 
 
 
